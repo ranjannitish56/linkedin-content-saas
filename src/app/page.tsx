@@ -75,26 +75,30 @@ export default function Dashboard() {
     setSaving(true);
     setSaveMessage('');
     
-    if (!user) {
-      setSaveMessage('Error: Not authenticated');
-      setSaving(false);
-      return;
-    }
+    try {
+      if (!user) {
+        throw new Error('Not authenticated');
+      }
 
-    const { error } = await supabase
-      .from('brand_profiles')
-      .upsert({ 
-        user_id: user.id,
-        ...profile,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id' });
+      // We remove id and updated_at to let Supabase handle the upsert via user_id correctly
+      const { id, updated_at, ...profileData } = profile as any;
 
-    if (error) {
-      setSaveMessage(`Error: ${error.message}`);
-    } else {
+      const { error } = await supabase
+        .from('brand_profiles')
+        .upsert({ 
+          user_id: user.id,
+          ...profileData,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'user_id' });
+
+      if (error) throw error;
       setSaveMessage('ENGINE CALIBRATED SUCCESSFULLY');
+    } catch (error: any) {
+      console.error('Save error:', error);
+      setSaveMessage(`Error: ${error.message || 'Failed to save'}`);
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   const handleGenerate = async () => {
@@ -297,7 +301,7 @@ export default function Dashboard() {
               {/* Action Bar - Floating Glassmorphic */}
               <div className="fixed bottom-10 left-[calc(50%+144px)] -translate-x-1/2 z-50 w-full max-w-sm px-6">
                 <div className="bg-white/70 backdrop-blur-2xl border border-white/40 p-3 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex items-center justify-between gap-4">
-                  <p className="text-[9px] font-black tracking-[0.2em] uppercase text-gray-400 ml-6 truncate max-w-[120px]">
+                  <p className="text-[9px] font-black tracking-[0.2em] uppercase text-gray-400 ml-6 flex-1">
                     {saving ? 'SYNCING...' : saveMessage || 'SYSTEM READY'}
                   </p>
                   <button 
