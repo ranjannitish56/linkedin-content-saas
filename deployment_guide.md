@@ -37,6 +37,28 @@ git branch -M main
 git push -u origin main
 ```
 
+> [!IMPORTANT]
+> **Authentication Troubleshooting:**
+> 1. **Password is Invisible:** When you type or paste your password/token in the Terminal, you will see NOTHING (no dots, no stars). This is a security feature. Just paste and hit Enter.
+> 2. **Password vs Token:** GitHub **no longer accepts** your normal account password in the terminal. You must use a **Personal Access Token (PAT)**.
+
+### How to get your Token (PAT):
+1. Go to **GitHub Settings** > **Developer settings** (bottom left).
+2. Click **Personal access tokens** > **Tokens (classic)**.
+3. Click **Generate new token** > **Generate new token (classic)**.
+4. Note: "SaaS Deploy".
+5. Expiration: 30 days.
+6. **Check the "repo" box** (top one).
+7. Scroll down and click **Generate token**.
+8. **COPY THE TOKEN IMMEDIATELY.** You won't see it again.
+9. **When Terminal asks for "Password", paste THE TOKEN instead of your password.**
+10. **STILL NOT WORKING?** Run this command to "Force" the link (Replace `YOUR_TOKEN` with the code you copied):
+
+```bash
+git remote set-url origin https://ranjannitish56:YOUR_TOKEN@github.com/ranjannitish56/linkedin-content-saas.git
+git push -u origin main
+```
+
 ## 1. Supabase Setup (The Database)
 In your Supabase Dashboard:
 1. Go to **SQL Editor** (left sidebar).
@@ -51,7 +73,13 @@ In your Supabase Dashboard:
 3. Select this repository.
 4. Go to the **Variables** tab and add:
    - `OPENAI_API_KEY`: *(Your OpenAI Key)*
-5. Railway will automatically detect the `backend/` folder and deploy your API.
+5. **CRITICAL (Root Directory)**: Go to **Settings** > **General** > **Root Directory** and set it to `/backend`. 
+   - *This tells Railway to ignore the frontend and only run the engine.*
+6. Railway will automatically deploy your API.
+
+> [!TIP]
+> **Can't find your repo on Railway?**
+> Click on **"Configure GitHub App"** in the Railway search popup. This will take you to GitHub where you need to make sure the `linkedin-content-saas` repository is selected (or choose "All repositories").
 
 ## 3. Vercel Setup (The Frontend)
 1. Go to [Vercel.com](https://vercel.com).
