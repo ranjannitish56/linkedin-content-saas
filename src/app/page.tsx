@@ -13,6 +13,9 @@ function cn(...inputs: ClassValue[]) {
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('brand');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [email, setEmail] = useState('');
+  const [authLoading, setAuthLoading] = useState(true);
   const [profile, setProfile] = useState({
     company_name: '',
     founder_name: '',
@@ -31,28 +34,47 @@ export default function Dashboard() {
   const [saveMessage, setSaveMessage] = useState('');
   const [generatedPosts, setGeneratedPosts] = useState<any[]>([]);
 
-  // 1. Fetch existing profile on load
+  // 1. Check Auth & Fetch Profile
   useEffect(() => {
-    async function loadProfile() {
+    async function init() {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      setUser(user);
+      
+      if (user) {
+        const { data } = await supabase
+          .from('brand_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
 
-      const { data, error } = await supabase
-        .from('brand_profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
-      if (data) setProfile(data);
+        if (data) setProfile(data);
+      }
+      setAuthLoading(false);
     }
-    loadProfile();
+    init();
   }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: window.location.origin }
+    });
+    if (error) setSaveMessage(error.message);
+    else setSaveMessage('Check your email for the login link!');
+    setSaving(false);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.reload();
+  };
 
   const handleUpdateProfile = async () => {
     setSaving(true);
     setSaveMessage('');
     
-    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       setSaveMessage('Error: Not authenticated');
       setSaving(false);
@@ -99,6 +121,46 @@ export default function Dashboard() {
       setIsGenerating(false);
     }
   };
+
+  if (authLoading) return (
+    <div className="h-screen w-screen flex items-center justify-center bg-white">
+      <div className="w-8 h-8 border-4 border-gray-100 border-t-black rounded-full animate-spin" />
+    </div>
+  );
+
+  if (!user) return (
+    <div className="h-screen w-screen flex items-center justify-center bg-[#FDFDFD] p-6">
+      <div className="max-w-md w-full space-y-8 text-center">
+        <div className="flex justify-center">
+          <div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center">
+            <Sparkles className="text-white w-6 h-6" />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <h1 className="text-3xl font-black tracking-tighter">CONTENT SAAS</h1>
+          <p className="text-gray-400 font-medium">Log in to your strategic command center.</p>
+        </div>
+        <form onSubmit={handleLogin} className="space-y-4 pt-4">
+          <input 
+            type="email" 
+            placeholder="Enter your email" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-4 bg-white border border-gray-100 rounded-2xl shadow-sm focus:border-black outline-none text-center font-medium"
+            required
+          />
+          <button 
+            type="submit"
+            disabled={saving}
+            className="w-full bg-black text-white py-4 rounded-2xl font-black text-xs tracking-[0.2em] shadow-xl hover:scale-[1.02] transition-all disabled:opacity-50"
+          >
+            {saving ? 'SENDING LINK...' : 'GET MAGIC LINK'}
+          </button>
+        </form>
+        {saveMessage && <p className="text-xs font-bold text-black uppercase tracking-widest">{saveMessage}</p>}
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex h-screen bg-[#FDFDFD]">
