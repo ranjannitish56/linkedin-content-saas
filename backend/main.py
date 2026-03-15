@@ -86,9 +86,13 @@ Voice Constraints:
         chain = prompt | llm
         response = chain.invoke({"strategy": strategy})
         
+        # Simple parsing logic to turn the string into a list of post objects
+        raw_posts = response.content.split("\n\n")
+        posts = [{"content": p.strip(), "image_url": None} for p in raw_posts if p.strip()]
+        
         return {
             "success": True,
-            "posts": response.content
+            "posts": posts[:request.count]
         }
 
     except Exception as e:

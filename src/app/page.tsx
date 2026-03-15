@@ -29,6 +29,7 @@ export default function Dashboard() {
   });
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
+  const [generatedPosts, setGeneratedPosts] = useState<any[]>([]);
 
   // 1. Fetch existing profile on load
   useEffect(() => {
@@ -74,6 +75,31 @@ export default function Dashboard() {
     setSaving(false);
   };
 
+  const handleGenerate = async () => {
+    setIsGenerating(true);
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          profile: profile,
+          count: 5
+        })
+      });
+      
+      if (!response.ok) throw new Error('Generation failed');
+      
+      const data = await response.json();
+      setGeneratedPosts(data.posts || []);
+    } catch (err) {
+      console.error(err);
+      setSaveMessage('Generation failed. Check API URL.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <div className="flex h-screen bg-[#FDFDFD]">
       {/* Sidebar */}
@@ -96,13 +122,13 @@ export default function Dashboard() {
             onClick={() => setActiveTab('generate')}
           />
           <NavItem 
-            icon={<PenTool size={18} />} 
+            icon={<PenLine size={18} />} 
             label="Brand Profile" 
             isActive={activeTab === 'brand'} 
             onClick={() => setActiveTab('brand')}
           />
           <NavItem 
-            icon={<ImageIcon size={18} />} 
+            icon={<Target size={18} />} 
             label="Visual Gallery" 
             isActive={activeTab === 'history'} 
             onClick={() => setActiveTab('history')}
@@ -129,10 +155,10 @@ export default function Dashboard() {
           </div>
           <div className="flex items-center gap-4">
              <div className="text-right">
-                <p className="text-sm font-bold text-black leading-none">Nitish Ranjan</p>
-                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Free Plan</p>
+                <p className="text-sm font-bold text-black leading-none">Founder Account</p>
+                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Cloud Active</p>
              </div>
-             <div className="w-9 h-9 rounded-full bg-gray-100 border border-gray-200" />
+             <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center text-white text-xs font-bold">NR</div>
           </div>
         </header>
 
@@ -140,30 +166,30 @@ export default function Dashboard() {
           {activeTab === 'generate' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
               <section className="space-y-1">
-                <h2 className="text-3xl font-black tracking-tight">CREATE CONTENT</h2>
-                <p className="text-gray-400 text-lg">Turn your curated strategy into LinkedIn posts.</p>
+                <h2 className="text-3xl font-black tracking-tight uppercase">Create Content</h2>
+                <p className="text-gray-400 text-lg">Turn your calibrated strategy into high-authority LinkedIn posts.</p>
               </section>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-6 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer border-l-4 border-l-black">
-                   <h3 className="font-bold flex items-center gap-2 mb-2">
-                     <Sparkles size={16} />
+                <div className="p-8 bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-xl transition-all group cursor-pointer border-t-8 border-t-black">
+                   <h3 className="font-black text-xs uppercase tracking-widest flex items-center gap-2 mb-4">
+                     <Sparkles size={14} className="text-black" />
                      Strategic Batch
                    </h3>
-                   <p className="text-sm text-gray-500 mb-4">Generate 5 posts using the full Strategic Lens logic.</p>
+                   <p className="text-sm text-gray-500 mb-6 leading-relaxed">Generate 5 curated nodes based on your current brand discovery session.</p>
                    <button 
-                    onClick={() => setIsGenerating(true)}
+                    onClick={handleGenerate}
                     disabled={isGenerating}
-                    className="w-full bg-black text-white text-sm font-bold py-3 rounded hover:bg-gray-900 transition-colors disabled:bg-gray-100 disabled:text-gray-400"
+                    className="w-full bg-black text-white text-xs font-black tracking-widest py-4 rounded-xl hover:scale-[1.02] transition-all disabled:bg-gray-100 disabled:text-gray-300"
                    >
                      {isGenerating ? 'ANALYZING LENSES...' : 'GENERATE BATCH'}
                    </button>
                 </div>
 
-                <div className="p-6 bg-white border border-gray-100 rounded-xl shadow-sm space-y-4">
-                  <label className="text-sm font-bold uppercase tracking-wider text-gray-400">Quick Prompt</label>
+                <div className="p-8 bg-gray-50/50 border border-dashed border-gray-200 rounded-3xl space-y-4">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Context Injection</label>
                   <textarea 
-                    className="w-full h-24 p-3 bg-gray-50 border border-transparent rounded focus:border-black text-sm resize-none"
+                    className="w-full h-24 p-4 bg-white border border-transparent rounded-2xl shadow-sm focus:border-black text-sm resize-none outline-none"
                     placeholder="Focus on specific win from last week..."
                   />
                 </div>
@@ -171,14 +197,33 @@ export default function Dashboard() {
 
               {/* Status Section */}
               {isGenerating && (
-                <div className="p-8 border border-dashed border-gray-200 rounded-xl bg-gray-50/50 flex flex-col items-center justify-center py-16 space-y-4">
-                  <div className="relative">
-                    <div className="w-12 h-12 border-2 border-gray-100 border-t-black rounded-full animate-spin" />
-                  </div>
+                <div className="p-12 border border-gray-100 rounded-3xl bg-white flex flex-col items-center justify-center py-20 space-y-6 shadow-2xl animate-pulse">
+                  <div className="w-16 h-16 border-4 border-gray-100 border-t-black rounded-full animate-spin" />
                   <div className="text-center">
-                    <p className="font-bold text-black">GENERATING POSTS</p>
-                    <p className="text-sm text-gray-400">GPT-5.4 is identifying the best hooks...</p>
+                    <p className="font-black text-xs uppercase tracking-[0.3em] text-black">Generating Strategic Nodes</p>
+                    <p className="text-sm text-gray-400 mt-2">Lining up specific POVs from your brand profile...</p>
                   </div>
+                </div>
+              )}
+
+              {/* Generated Posts */}
+              {generatedPosts.length > 0 && !isGenerating && (
+                <div className="space-y-6">
+                   <h3 className="text-sm font-black uppercase tracking-widest text-gray-400">Latest Generation</h3>
+                   {generatedPosts.map((post, i) => (
+                     <div key={i} className="p-8 bg-white border border-gray-100 rounded-3xl shadow-sm space-y-4 hover:border-black transition-colors">
+                        <div className="flex items-center gap-2">
+                           <div className="w-2 h-2 rounded-full bg-black" />
+                           <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Post {i+1}</span>
+                        </div>
+                        <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">{post.content}</p>
+                        {post.image_url && (
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img src={post.image_url} alt="Generated" className="w-full h-64 object-cover rounded-2xl border border-gray-100" />
+                        )}
+                        <button className="text-[10px] font-black uppercase tracking-widest border border-gray-200 px-4 py-2 rounded-full hover:bg-black hover:text-white transition-all">Copy Post</button>
+                     </div>
+                   ))}
                 </div>
               )}
             </div>
