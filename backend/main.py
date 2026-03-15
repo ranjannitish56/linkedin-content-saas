@@ -7,7 +7,12 @@ import uuid
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
-from .visualizer import create_quote_card # We will create this file next
+from visualizer import create_quote_card 
+import os
+import uvicorn
+
+# Fix for Railway: use the PORT environment variable
+PORT = int(os.environ.get("PORT", 8000))
 
 load_dotenv()
 
@@ -19,13 +24,21 @@ os.makedirs(STATIC_DIR, exist_ok=True)
 
 class BrandProfile(BaseModel):
     company_name: str
-    mission: str
-    target_audience: str
-    tone: str
+    founder_name: Optional[str] = None
+    origin_story: Optional[str] = None
+    dirty_secret: Optional[str] = None
+    contrarian_belief: Optional[str] = None
+    enemy: Optional[str] = None
+    biggest_win: Optional[str] = None
+    secret_sauce: Optional[str] = None
+    data_dump: Optional[str] = None
+    core_tone: str = "Contrarian & Provocative"
+    words_to_kill: str = "Delve, Tapestry, Unleash, Synergize"
+    primary_audience: Optional[str] = None
 
 class GenerationRequest(BaseModel):
-    brand_profile: BrandProfile
-    num_posts: int = 5
+    profile: BrandProfile
+    count: int = 5
     strategy_manual: Optional[str] = None
 
 class VisualRequest(BaseModel):
@@ -50,19 +63,19 @@ async def generate_posts(request: GenerationRequest):
 
         llm = ChatOpenAI(model="gpt-4o", temperature=0.6)
 
-        persona = f"""You are ghostwriting LinkedIn posts for the founder of {request.brand_profile.company_name}.
+        persona = f"""You are ghostwriting LinkedIn posts for {request.profile.founder_name}, the founder of {request.profile.company_name}.
         
-Business Context: {request.brand_profile.mission}
-Target Audience: {request.brand_profile.target_audience}
-Tone: {request.brand_profile.tone}
+Brand Identity: {request.profile.origin_story}
+The Status Quo we fight: {request.profile.enemy}
+Our Contrarian Truth: {request.profile.contrarian_belief}
+The Industry Dirty Secret: {request.profile.dirty_secret}
+Our Edge (Secret Sauce): {request.profile.secret_sauce}
 
-Voice Rules:
-- Direct and confident.
-- Slightly provocative.
-- Grounded in specifics.
-- Conversational but intelligent.
-
-{strategy}
+Voice Constraints:
+- Tone: {request.profile.core_tone}
+- Strict Rule: NEVER use these words: {request.profile.words_to_kill}
+- Style: Direct, slightly provocative, grounded in specifics.
+- Strategy: {strategy}
 """
 
         prompt = ChatPromptTemplate.from_messages([
@@ -103,5 +116,4 @@ async def visualize_quote(request: VisualRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
