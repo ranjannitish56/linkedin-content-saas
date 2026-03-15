@@ -3,22 +3,64 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #111111;
+  --background: #FFFFFF;
+  --foreground: #000000;
+  --card: #FFFFFF;
+  --card-foreground: #000000;
+  --popover: 255 255 255;
+  --popover-foreground: 0 0 0;
+  --primary: #000000;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F1F1F1;
+  --secondary-foreground: #000000;
+  --muted: #F9F9F9;
+  --muted-foreground: #737373;
+  --accent: #F1F1F1;
+  --accent-foreground: #000000;
+  --destructive: 255 0 0;
+  --destructive-foreground: 255 255 255;
+  --border: #E2E2E2;
+  --input: #E2E2E2;
+  --ring: #000000;
+  --radius: 1rem;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 @layer base {
+  * {
+    @apply border-border;
+  }
   body {
-    @apply font-sans antialiased bg-[#FDFDFD];
+    @apply font-sans antialiased bg-[#FDFDFD] text-foreground;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
   
   button {
-    @apply active:scale-95 transition-all duration-200 cursor-pointer;
+    @apply active:scale-[0.98] transition-all duration-200 cursor-pointer disabled:cursor-not-allowed;
   }
   
   input, textarea, select {
     @apply focus:outline-none transition-all duration-200;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-200 rounded-full hover:bg-gray-300 transition-colors;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.04)];
+  }
+  
+  .glossy-button {
+    @apply relative overflow-hidden bg-black text-white px-6 py-3 rounded-2xl font-bold transition-all hover:shadow-[0_0_20px_rgba(0,0,0,0.1)] active:scale-95;
   }
 }

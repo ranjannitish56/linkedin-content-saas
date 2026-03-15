@@ -73,9 +73,12 @@ In your Supabase Dashboard:
 3. Select this repository.
 4. Go to the **Variables** tab and add:
    - `OPENAI_API_KEY`: *(Your OpenAI Key)*
-5. **CRITICAL (Root Directory)**: Go to **Settings** > **General** > **Root Directory** and set it to `/backend`. 
-   - *This tells Railway to ignore the frontend and only run the engine.*
-6. Railway will automatically deploy your API.
+5. **CRITICAL (Root Directory)**:
+   - Click on your **Service Box** (usually looks like a colored rectangle for your repo).
+   - Go to the **Settings** tab.
+   - Look for **"Root Directory"** under the **"Service"** section.
+   - Set it to `/backend` and click the checkmark/save.
+6. Railway will automatically redeploy.
 
 > [!TIP]
 > **Can't find your repo on Railway?**
@@ -87,12 +90,20 @@ In your Supabase Dashboard:
 3. In the **Environment Variables** section, add:
    - `NEXT_PUBLIC_SUPABASE_URL`: *(From Supabase Settings > API)*
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: *(From Supabase Settings > API)*
+   - `NEXT_PUBLIC_API_URL`: **GET THIS FROM RAILWAY** (Instruction below)
 4. Click **Deploy**.
 
-## The Way Ahead
-After deployment:
+### How to get your Railway API URL:
+1. Go to your **Railway Project**.
+2. Click your **Service Box**.
+3. Go to the **Networking** tab.
+4. Click **"Generate Domain"** (if one doesn't exist already).
+5. Copy the URL (e.g., `https://backend-production-123.up.railway.app`).
+6. **THIS IS YOUR `NEXT_PUBLIC_API_URL`.**
+
+## 4. Final Verification
 1. Open your Vercel URL.
-2. Log in via Magic Link.
-3. Go to **Brand Profile** and complete the **Discovery Session**.
-4. Hit **Calibrate Engine**.
-5. Go to **Generate** and start creating your first high-authority posts!
+2. Log in.
+3. Go to **Brand Profile**, fill it out, and click **Calibrate Engine**.
+4. Go to **Generate** and click **Generate Batch**.
+5. Your first 5 high-authority posts will appear on the dashboard!
