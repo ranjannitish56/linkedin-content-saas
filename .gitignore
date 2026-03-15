@@ -1,0 +1,26 @@
+# Dependencies
+node_modules
+/.next/
+/out/
+/build
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Images/Large Files
+backend/static_output/
+*.png
+*.jpg
+*.jpeg
+
+# OS
+.DS_Store
+Thumbs.db
