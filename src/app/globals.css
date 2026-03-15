@@ -7,20 +7,18 @@
   --foreground: #111111;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 @layer base {
-  button {
-    @apply active:scale-95 transition-transform duration-100;
+  body {
+    @apply font-sans antialiased bg-[#FDFDFD];
   }
   
-  input, textarea {
-    @apply focus:outline-none focus:ring-1 focus:ring-black border-border;
+  button {
+    @apply active:scale-95 transition-all duration-200 cursor-pointer;
+  }
+  
+  input, textarea, select {
+    @apply focus:outline-none transition-all duration-200;
   }
 }
