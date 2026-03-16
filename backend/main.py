@@ -80,7 +80,7 @@ Voice Constraints:
 
         prompt = ChatPromptTemplate.from_messages([
             ("system", persona),
-            ("human", f"Write {request.num_posts} distinct LinkedIn posts based on the strategy above.")
+            ("human", f"Write {request.count} distinct LinkedIn posts based on the strategy above.")
         ])
 
         chain = prompt | llm

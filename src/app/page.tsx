@@ -114,13 +114,14 @@ export default function Dashboard() {
         })
       });
       
-      if (!response.ok) throw new Error('Generation failed');
-      
       const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || 'Generation failed');
+      
       setGeneratedPosts(data.posts || []);
-    } catch (err) {
+      setSaveMessage('CONTENT GENERATED SUCCESSFULLY');
+    } catch (err: any) {
       console.error(err);
-      setSaveMessage('Generation failed. Check API URL.');
+      setSaveMessage(`Generation Error: ${err.message || 'Check API connection'}`);
     } finally {
       setIsGenerating(false);
     }
