@@ -18,6 +18,26 @@ export default function Dashboard() {
   const [authLoading, setAuthLoading] = useState(true);
   const [profile, setProfile] = useState({
     company_name: '',
+    industry: '',
+    company_description: '',
+    business_size: '',
+    markets: '',
+    target_audience: '',
+    decision_makers: '',
+    products_services: '',
+    marketing_channels: '',
+    campaign_example: '',
+    campaign_outcome: '',
+    industry_mistakes: '',
+    what_works: '',
+    unique_perspective: '',
+    misunderstood: '',
+    ai_guardrails: '',
+    brand_philosophy: '',
+    content_tone: '',
+    content_inspiration: '',
+    competitive_advantage: '',
+    // Legacy fields kept for backend compatibility
     founder_name: '',
     origin_story: '',
     dirty_secret: '',
@@ -26,9 +46,9 @@ export default function Dashboard() {
     biggest_win: '',
     secret_sauce: '',
     data_dump: '',
-    core_tone: 'Contrarian & Provocative',
-    words_to_kill: 'Delve, Tapestry, Unleash, Synergize',
-    primary_audience: ''
+    core_tone: '',
+    words_to_kill: '',
+    primary_audience: '',
   });
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
@@ -236,70 +256,209 @@ export default function Dashboard() {
               <header className="space-y-3">
                 <div className="inline-flex items-center px-3 py-1 bg-black text-white rounded-full text-[9px] font-black tracking-[0.2em] uppercase mb-4 shadow-xl">Phase 01: Calibration</div>
                 <h2 className="text-5xl font-black tracking-tighter leading-[0.9] uppercase">The Discovery<br/>Session</h2>
-                <p className="text-gray-400 font-medium text-lg max-w-xl leading-relaxed">To write with high-authority, the engine needs to absorb your strategic worldview. Calibrate your Brand DNA below.</p>
+                <p className="text-gray-400 font-medium text-lg max-w-xl leading-relaxed">To generate authority-building content, the engine needs to absorb your complete strategic worldview. Answer every question to maximise output quality.</p>
               </header>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                {/* Identity Section */}
-                <section className="space-y-8">
-                  <div className="flex items-center gap-4 group cursor-default">
-                    <div className="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-xs font-black italic text-gray-300 group-hover:bg-black group-hover:text-white transition-all duration-500">01</div>
-                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Identity & Core</h3>
+              <div className="space-y-14">
+
+                {/* Section 1 — Company Overview */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">01</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Company Overview</h3>
                   </div>
-                  
-                  <div className="space-y-6">
-                    <InputField 
-                      label="Company / Product" 
-                      placeholder="e.g. Youthfluence" 
-                      value={profile.company_name}
-                      onChange={(val) => setProfile({...profile, company_name: val})}
-                    />
-                    <InputField 
-                      label="Founder / Author" 
-                      placeholder="e.g. Nitish Ranjan" 
-                      value={profile.founder_name}
-                      onChange={(val) => setProfile({...profile, founder_name: val})}
-                    />
-                    <TextAreaField 
-                      label="The Origin Story" 
-                      placeholder="Why does this company exist beyond profit? What market gap did you spot?" 
-                      value={profile.origin_story}
-                      onChange={(val) => setProfile({...profile, origin_story: val})}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <InputField label="1. What is your company or brand name?" placeholder="Example: Nike, Unacademy, Zomato, HubSpot" value={profile.company_name} onChange={(val) => setProfile({...profile, company_name: val})} />
+                    <InputField label="2. What industry does your company operate in?" placeholder="Example: EdTech, SaaS, FMCG, D2C, Fintech, Healthcare" value={profile.industry} onChange={(val) => setProfile({...profile, industry: val})} />
+                  </div>
+                  <TextAreaField label="3. Briefly describe what your company does" placeholder="Example: We build software that helps companies manage customer support conversations across multiple channels." value={profile.company_description} onChange={(val) => setProfile({...profile, company_description: val})} />
+                </section>
+
+                {/* Section 2 — Business Scale */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">02</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Business Scale</h3>
+                  </div>
+                  <div className="space-y-3">
+                    <label className="block text-[11px] font-black tracking-widest uppercase text-gray-500">4. What is the approximate size of your business?</label>
+                    <div className="flex flex-wrap gap-3">
+                      {['Early-stage startup', 'Growing startup', 'Mid-sized company', 'Enterprise'].map((opt) => (
+                        <button key={opt} onClick={() => setProfile({...profile, business_size: opt})}
+                          className={`px-5 py-2.5 rounded-2xl text-[11px] font-black tracking-wide transition-all duration-200 border-2 ${profile.business_size === opt ? 'bg-black text-white border-black' : 'bg-white text-gray-400 border-gray-100 hover:border-gray-300 hover:text-black'}`}>
+                          {opt}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <TextAreaField label="5. Which markets or regions do you operate in?" placeholder="Example: India, Southeast Asia, United States, Europe" value={profile.markets} onChange={(val) => setProfile({...profile, markets: val})} />
+                </section>
+
+                {/* Section 3 — Target Audience */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">03</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Target Audience</h3>
+                  </div>
+                  <TextAreaField label="6. Who is your primary target audience?" placeholder={"Example:\nStartup founders\nMarketing leaders\nCollege students\nYoung professionals"} value={profile.target_audience} onChange={(val) => setProfile({...profile, target_audience: val})} />
+                  <InputField label="7. What type of decision makers usually buy from you?" placeholder="Example: Brand managers, marketing heads, founders, CTOs" value={profile.decision_makers} onChange={(val) => setProfile({...profile, decision_makers: val})} />
+                </section>
+
+                {/* Section 4 — Products or Services */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">04</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Products or Services</h3>
+                  </div>
+                  <TextAreaField label="8. What are your main products or services?" placeholder={"Example:\nCRM software\nProtein supplements\nCampus marketing campaigns\nOnline courses"} value={profile.products_services} onChange={(val) => setProfile({...profile, products_services: val})} />
+                </section>
+
+                {/* Section 5 — Marketing Experience */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">05</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Marketing Experience</h3>
+                  </div>
+                  <div className="space-y-3">
+                    <label className="block text-[11px] font-black tracking-widest uppercase text-gray-500">9. What types of marketing have you used so far? (select all that apply)</label>
+                    <div className="flex flex-wrap gap-3">
+                      {['Social media marketing', 'Influencer marketing', 'Paid advertising', 'Content marketing', 'Community marketing', 'Events / activations', 'Partnerships', 'Other'].map((opt) => {
+                        const selected = profile.marketing_channels.split(',').map(s => s.trim()).filter(Boolean).includes(opt);
+                        return (
+                          <button key={opt} onClick={() => {
+                            const current = profile.marketing_channels.split(',').map(s => s.trim()).filter(Boolean);
+                            const updated = selected ? current.filter(c => c !== opt) : [...current, opt];
+                            setProfile({...profile, marketing_channels: updated.join(', ')});
+                          }}
+                            className={`px-5 py-2.5 rounded-2xl text-[11px] font-black tracking-wide transition-all duration-200 border-2 ${selected ? 'bg-black text-white border-black' : 'bg-white text-gray-400 border-gray-100 hover:border-gray-300 hover:text-black'}`}>
+                            {opt}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </section>
+
+                {/* Section 6 — Campaign Examples */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">06</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Campaign Examples</h3>
+                  </div>
+                  <TextAreaField label="10. Share an example of a marketing campaign you have run" placeholder={"Example:\nWe ran a campaign targeting university students across multiple cities with a student ambassador program and on-campus activations."} value={profile.campaign_example} onChange={(val) => setProfile({...profile, campaign_example: val})} />
+                  <TextAreaField label="11. What was the outcome of that campaign?" placeholder={"Example:\nGenerated 8,000 registrations and increased brand awareness significantly."} value={profile.campaign_outcome} onChange={(val) => setProfile({...profile, campaign_outcome: val})} />
+                </section>
+
+                {/* Section 7 — Observed Industry Mistakes */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">07</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Observed Industry Mistakes</h3>
+                  </div>
+                  <TextAreaField label="12. What are some common mistakes you see companies make in your industry?" placeholder={"Example:\nCompanies focus too much on ads and ignore community engagement."} value={profile.industry_mistakes} onChange={(val) => setProfile({...profile, industry_mistakes: val})} />
+                </section>
+
+                {/* Section 8 — What Actually Works */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">08</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">What Actually Works</h3>
+                  </div>
+                  <TextAreaField label="13. From your experience, what strategies or tactics actually work well in your market?" placeholder={"Example:\nWord-of-mouth marketing and community engagement drive better long-term results than pure paid advertising."} value={profile.what_works} onChange={(val) => setProfile({...profile, what_works: val})} />
+                </section>
+
+                {/* Section 9 — Unique Perspective */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">09</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Unique Perspective</h3>
+                  </div>
+                  <TextAreaField label="14. What does your company believe differently compared to others in your industry?" placeholder={"Example:\nMost brands focus on reach. We focus on credibility and community trust."} value={profile.unique_perspective} onChange={(val) => setProfile({...profile, unique_perspective: val})} />
+                </section>
+
+                {/* Section 10 — Founder Perspective */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">10</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Founder or Brand Perspective</h3>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-[11px] font-black tracking-widest uppercase text-gray-500">15. Complete this sentence: "Most people misunderstand our industry because ______."</label>
+                    <textarea
+                      className="w-full bg-gray-50/50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium text-black placeholder-gray-300 focus:outline-none focus:border-black/20 focus:bg-white transition-all resize-none"
+                      rows={3}
+                      placeholder="Example: they assume success depends only on advertising instead of distribution and trust."
+                      value={profile.misunderstood}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setProfile({...profile, misunderstood: e.target.value})}
                     />
                   </div>
                 </section>
 
-                {/* Strategy Section */}
-                <section className="space-y-8">
-                  <div className="flex items-center gap-4 group cursor-default">
-                    <div className="w-10 h-10 rounded-2xl border-2 border-black flex items-center justify-center text-xs font-black italic text-black group-hover:bg-black group-hover:text-white transition-all duration-500">02</div>
-                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Contrarian POV</h3>
+                {/* Section 11 — AI Guardrails */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">11</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">AI Guardrails</h3>
                   </div>
+                  <TextAreaField label="16. What should the AI NEVER say about your company?" placeholder={"Example:\nDo not fabricate statistics\nDo not sound overly promotional\nAvoid generic marketing clichés"} value={profile.ai_guardrails} onChange={(val) => setProfile({...profile, ai_guardrails: val})} />
+                </section>
 
-                  <div className="space-y-6">
-                    <TextAreaField 
-                      label="Industry Dirty Secret" 
-                      placeholder="What does everyone know but no one says out loud?" 
-                      value={profile.dirty_secret}
-                      onChange={(val) => setProfile({...profile, dirty_secret: val})}
-                    />
-                    <TextAreaField 
-                      label="Contrarian Belief" 
-                      placeholder="What do you believe that others disagree with?" 
-                      value={profile.contrarian_belief}
-                      onChange={(val) => setProfile({...profile, contrarian_belief: val})}
-                    />
-                    <InputField 
-                      label="The Common Enemy" 
-                      placeholder="e.g. Lazy agencies, 'AI' fluff, status quo" 
-                      value={profile.enemy}
-                      onChange={(val) => setProfile({...profile, enemy: val})}
-                    />
+                {/* Section 12 — Core Brand Idea */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">12</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Core Brand Idea</h3>
+                  </div>
+                  <InputField label="17. If you had to summarize your brand philosophy in one sentence, what would it be?" placeholder="Example: The best marketing spreads through communities, not ads." value={profile.brand_philosophy} onChange={(val) => setProfile({...profile, brand_philosophy: val})} />
+                </section>
+
+                {/* Section 13 — Content Tone */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">13</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Content Tone</h3>
+                  </div>
+                  <div className="space-y-3">
+                    <label className="block text-[11px] font-black tracking-widest uppercase text-gray-500">18. How should your LinkedIn content sound? (select all that apply)</label>
+                    <div className="flex flex-wrap gap-3">
+                      {['Insightful', 'Educational', 'Contrarian', 'Storytelling', 'Tactical', 'Opinionated', 'Humorous'].map((opt) => {
+                        const selected = profile.content_tone.split(',').map(s => s.trim()).filter(Boolean).includes(opt);
+                        return (
+                          <button key={opt} onClick={() => {
+                            const current = profile.content_tone.split(',').map(s => s.trim()).filter(Boolean);
+                            const updated = selected ? current.filter(c => c !== opt) : [...current, opt];
+                            setProfile({...profile, content_tone: updated.join(', ')});
+                          }}
+                            className={`px-5 py-2.5 rounded-2xl text-[11px] font-black tracking-wide transition-all duration-200 border-2 ${selected ? 'bg-black text-white border-black' : 'bg-white text-gray-400 border-gray-100 hover:border-gray-300 hover:text-black'}`}>
+                            {opt}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </section>
+
+                {/* Section 14 — Content Inspiration */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">14</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Content Inspiration</h3>
+                  </div>
+                  <InputField label="19. Are there any creators, founders, or companies whose content style you admire?" placeholder="Example: marketing creators, startup founders, SaaS leaders" value={profile.content_inspiration} onChange={(val) => setProfile({...profile, content_inspiration: val})} />
+                </section>
+
+                {/* Section 15 — Competitive Advantage */}
+                <section className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-2xl bg-black flex items-center justify-center text-xs font-black italic text-white">15</div>
+                    <h3 className="text-xs font-black tracking-[0.3em] uppercase text-black/80">Competitive Advantage</h3>
+                  </div>
+                  <TextAreaField label="20. What is your biggest competitive advantage?" placeholder={"Example:\nA strong community network\nProprietary technology\nDeep industry expertise"} value={profile.competitive_advantage} onChange={(val) => setProfile({...profile, competitive_advantage: val})} />
+                </section>
+
               </div>
 
-              {/* Action Bar - Floating Glassmorphic */}
+              {/* Action Bar */}
               <div className="fixed bottom-10 left-[calc(50%+144px)] -translate-x-1/2 z-50 w-full max-w-sm px-6">
                 <div className="bg-white/70 backdrop-blur-2xl border border-white/40 p-3 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex items-center justify-between gap-4">
                   <p className="text-[9px] font-black tracking-[0.2em] uppercase text-gray-400 ml-6 flex-1">
@@ -309,7 +468,7 @@ export default function Dashboard() {
                     onClick={handleUpdateProfile}
                     className="bg-black text-white px-8 py-4 rounded-[1.8rem] font-black text-[10px] tracking-widest uppercase hover:scale-[1.05] active:scale-95 transition-all shadow-xl flex items-center gap-2 group"
                   >
-                    {saving ? 'SAVING' : 'SECURE DNA'}
+                    {saving ? 'SAVING' : 'GENERATE MY CONTENT STRATEGY'}
                     <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
                   </button>
                 </div>

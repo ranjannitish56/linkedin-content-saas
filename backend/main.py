@@ -33,7 +33,37 @@ STATIC_DIR = "static_images"
 os.makedirs(STATIC_DIR, exist_ok=True)
 
 class BrandProfile(BaseModel):
+    # Section 1 — Company Overview
     company_name: str
+    industry: Optional[str] = None
+    company_description: Optional[str] = None
+    # Section 2 — Business Scale
+    business_size: Optional[str] = None
+    markets: Optional[str] = None
+    # Section 3 — Target Audience
+    target_audience: Optional[str] = None
+    decision_makers: Optional[str] = None
+    # Section 4 — Products / Services
+    products_services: Optional[str] = None
+    # Section 5 — Marketing Experience
+    marketing_channels: Optional[str] = None
+    # Section 6 — Campaign Examples
+    campaign_example: Optional[str] = None
+    campaign_outcome: Optional[str] = None
+    # Section 7-8 — Mistakes & What Works
+    industry_mistakes: Optional[str] = None
+    what_works: Optional[str] = None
+    # Section 9-10 — POV
+    unique_perspective: Optional[str] = None
+    misunderstood: Optional[str] = None
+    # Section 11-12 — Guardrails & Philosophy
+    ai_guardrails: Optional[str] = None
+    brand_philosophy: Optional[str] = None
+    # Section 13-15 — Tone & Competitive Advantage
+    content_tone: Optional[str] = None
+    content_inspiration: Optional[str] = None
+    competitive_advantage: Optional[str] = None
+    # Legacy fields (kept for backwards compatibility)
     founder_name: Optional[str] = None
     origin_story: Optional[str] = None
     dirty_secret: Optional[str] = None
@@ -42,8 +72,8 @@ class BrandProfile(BaseModel):
     biggest_win: Optional[str] = None
     secret_sauce: Optional[str] = None
     data_dump: Optional[str] = None
-    core_tone: str = "Contrarian & Provocative"
-    words_to_kill: str = "Delve, Tapestry, Unleash, Synergize"
+    core_tone: Optional[str] = None
+    words_to_kill: Optional[str] = None
     primary_audience: Optional[str] = None
 
 class GenerationRequest(BaseModel):
@@ -73,19 +103,47 @@ async def generate_posts(request: GenerationRequest):
 
         llm = ChatOpenAI(model="gpt-4o", temperature=0.6)
 
-        persona = f"""You are ghostwriting LinkedIn posts for {request.profile.founder_name}, the founder of {request.profile.company_name}.
-        
-Brand Identity: {request.profile.origin_story}
-The Status Quo we fight: {request.profile.enemy}
-Our Contrarian Truth: {request.profile.contrarian_belief}
-The Industry Dirty Secret: {request.profile.dirty_secret}
-Our Edge (Secret Sauce): {request.profile.secret_sauce}
+        persona = f"""You are a LinkedIn ghostwriter for a brand called {request.profile.company_name}.
 
-Voice Constraints:
-- Tone: {request.profile.core_tone}
-- Strict Rule: NEVER use these words: {request.profile.words_to_kill}
-- Style: Direct, slightly provocative, grounded in specifics.
-- Strategy: {strategy}
+== COMPANY CONTEXT ==
+Industry: {request.profile.industry or 'Not specified'}
+What they do: {request.profile.company_description or 'Not specified'}
+Business size: {request.profile.business_size or 'Not specified'}
+Markets: {request.profile.markets or 'Not specified'}
+Products/Services: {request.profile.products_services or 'Not specified'}
+
+== TARGET AUDIENCE ==
+Primary audience: {request.profile.target_audience or 'Not specified'}
+Decision makers: {request.profile.decision_makers or 'Not specified'}
+
+== MARKETING EXPERIENCE ==
+Marketing channels used: {request.profile.marketing_channels or 'Not specified'}
+Campaign example: {request.profile.campaign_example or 'Not specified'}
+Campaign outcome: {request.profile.campaign_outcome or 'Not specified'}
+
+== UNIQUE PERSPECTIVE & POV ==
+What we believe differently: {request.profile.unique_perspective or 'Not specified'}
+Industry misunderstanding we challenge: Most people misunderstand our industry because {request.profile.misunderstood or 'unknown reasons'}.
+Common mistakes we see: {request.profile.industry_mistakes or 'Not specified'}
+What actually works: {request.profile.what_works or 'Not specified'}
+
+== BRAND VOICE ==
+Brand philosophy: {request.profile.brand_philosophy or 'Not specified'}
+Content tone: {request.profile.content_tone or 'Insightful, Tactical'}
+Content inspiration: {request.profile.content_inspiration or 'Not specified'}
+Competitive advantage: {request.profile.competitive_advantage or 'Not specified'}
+
+== GUARDRAILS (STRICT) ==
+NEVER say or do the following: {request.profile.ai_guardrails or 'Do not fabricate statistics. Do not sound promotional.'}
+
+== WRITING RULES ==
+- Write in first person from the brand's point of view
+- Be specific, not generic  
+- Lead with a strong hook on the first line
+- Each post should stand alone and feel complete
+- Use short paragraphs (1-3 lines max)
+- Do NOT use bullet points, hashtags, or emojis
+- Separate each post with "---"
 """
 
         prompt = ChatPromptTemplate.from_messages([
