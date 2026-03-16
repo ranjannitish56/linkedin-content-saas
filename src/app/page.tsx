@@ -347,7 +347,7 @@ export default function Dashboard() {
                 </div>
               ) : generatedPosts.length > 0 ? (
                 <div className="grid grid-cols-1 gap-10">
-                  {generatedPosts.map((post: any, i: number) => (
+                  {generatedPosts.filter((post: any) => post.content && post.content.trim().length > 30).map((post: any, i: number) => (
                     <div 
                       key={i} 
                       className="group bg-white border border-gray-100 p-12 rounded-[3.5rem] shadow-sm hover:shadow-2xl hover:border-black/5 transition-all duration-700 animate-in fade-in slide-in-from-bottom-12"

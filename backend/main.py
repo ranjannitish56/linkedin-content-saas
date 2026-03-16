@@ -96,9 +96,23 @@ Voice Constraints:
         chain = prompt | llm
         response = chain.invoke({"strategy": strategy})
         
-        # Simple parsing logic to turn the string into a list of post objects
-        raw_posts = response.content.split("\n\n")
-        posts = [{"content": p.strip(), "image_url": None} for p in raw_posts if p.strip()]
+        # Robust parsing: split on numbered sections or double newlines
+        raw_text = response.content
+        
+        # Try to split by numbered post markers first (e.g. "Post 1:", "1.", "---")
+        import re
+        sections = re.split(r'\n---+\n|\n#{1,3}\s|\nPost \d+:|\n\d+\.\s', raw_text)
+        
+        # If splitting by markers didn't work well, fall back to double newline  
+        if len(sections) <= 1:
+            sections = raw_text.split('\n\n')
+        
+        # Filter: only keep posts that have meaningful content (more than 50 chars)
+        posts = [
+            {"content": p.strip(), "image_url": None} 
+            for p in sections 
+            if len(p.strip()) > 50
+        ]
         
         return {
             "success": True,
