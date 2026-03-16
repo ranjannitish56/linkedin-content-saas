@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 import os
@@ -17,6 +18,15 @@ PORT = int(os.environ.get("PORT", 8000))
 load_dotenv()
 
 app = FastAPI(title="Content SaaS Engine")
+
+# Add CORS Middleware to allow requests from Vercel
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # In production, you might want to restrict this to your Vercel URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Storage path for local testing (in production we'd use Supabase Storage)
 STATIC_DIR = "static_images"
