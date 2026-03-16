@@ -323,11 +323,11 @@ export default function Dashboard() {
                     <label className="block text-[11px] font-black tracking-widest uppercase text-gray-500">9. What types of marketing have you used so far? (select all that apply)</label>
                     <div className="flex flex-wrap gap-3">
                       {['Social media marketing', 'Influencer marketing', 'Paid advertising', 'Content marketing', 'Community marketing', 'Events / activations', 'Partnerships', 'Other'].map((opt) => {
-                        const selected = profile.marketing_channels.split(',').map(s => s.trim()).filter(Boolean).includes(opt);
+                        const selected = (profile.marketing_channels || '').split(',').map((s: string) => s.trim()).filter(Boolean).includes(opt);
                         return (
                           <button key={opt} onClick={() => {
-                            const current = profile.marketing_channels.split(',').map(s => s.trim()).filter(Boolean);
-                            const updated = selected ? current.filter(c => c !== opt) : [...current, opt];
+                            const current = (profile.marketing_channels || '').split(',').map((s: string) => s.trim()).filter(Boolean);
+                            const updated = selected ? current.filter((c: string) => c !== opt) : [...current, opt];
                             setProfile({...profile, marketing_channels: updated.join(', ')});
                           }}
                             className={`px-5 py-2.5 rounded-2xl text-[11px] font-black tracking-wide transition-all duration-200 border-2 ${selected ? 'bg-black text-white border-black' : 'bg-white text-gray-400 border-gray-100 hover:border-gray-300 hover:text-black'}`}>
@@ -422,11 +422,11 @@ export default function Dashboard() {
                     <label className="block text-[11px] font-black tracking-widest uppercase text-gray-500">18. How should your LinkedIn content sound? (select all that apply)</label>
                     <div className="flex flex-wrap gap-3">
                       {['Insightful', 'Educational', 'Contrarian', 'Storytelling', 'Tactical', 'Opinionated', 'Humorous'].map((opt) => {
-                        const selected = profile.content_tone.split(',').map(s => s.trim()).filter(Boolean).includes(opt);
+                        const selected = (profile.content_tone || '').split(',').map((s: string) => s.trim()).filter(Boolean).includes(opt);
                         return (
                           <button key={opt} onClick={() => {
-                            const current = profile.content_tone.split(',').map(s => s.trim()).filter(Boolean);
-                            const updated = selected ? current.filter(c => c !== opt) : [...current, opt];
+                            const current = (profile.content_tone || '').split(',').map((s: string) => s.trim()).filter(Boolean);
+                            const updated = selected ? current.filter((c: string) => c !== opt) : [...current, opt];
                             setProfile({...profile, content_tone: updated.join(', ')});
                           }}
                             className={`px-5 py-2.5 rounded-2xl text-[11px] font-black tracking-wide transition-all duration-200 border-2 ${selected ? 'bg-black text-white border-black' : 'bg-white text-gray-400 border-gray-100 hover:border-gray-300 hover:text-black'}`}>
